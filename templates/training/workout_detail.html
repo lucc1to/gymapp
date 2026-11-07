@@ -12,5 +12,12 @@
   <p>Brak ćwiczeń w tym treningu.</p>
 {% endfor %}
 
+<h2>Dodaj ćwiczenie</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Dodaj</button>
+</form>
+
 <a href="{% url 'workout_list' %}">← Wróć</a>
 {% endblock %}

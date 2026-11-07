@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import WorkoutForm
+from .forms import WorkoutForm, WorkoutExerciseForm
 from .models import Workout
 
 
@@ -13,7 +13,19 @@ def workout_list(request):
 @login_required
 def workout_detail(request, pk):
     workout = get_object_or_404(Workout, pk=pk, user=request.user)
-    return render(request, "training/workout_detail.html", {"workout": workout})
+    if request.method == "POST":
+        form = WorkoutExerciseForm(request.POST)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.workout = workout
+            item.order = workout.items.count() + 1
+            item.save()
+            return redirect("workout_detail", pk=workout.pk)
+    else:
+        form = WorkoutExerciseForm()
+    return render(
+        request, "training/workout_detail.html", {"workout": workout, "form": form}
+    )
 
 
 @login_required

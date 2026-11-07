@@ -13,7 +13,6 @@ class WorkoutExerciseForm(forms.ModelForm):
         model = WorkoutExercise
         fields = [
             "exercise",
-            "order",
             "sets",
             "reps",
             "weight_kg",
