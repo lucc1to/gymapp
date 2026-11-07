@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ workout.name }}</h1>
+
+{% for item in workout.items.all %}
+  <article>
+    <strong>{{ item.exercise }}</strong>
+    <p>{{ item.sets }} x {{ item.reps }} · {{ item.weight_kg }} kg · przerwa {{ item.rest_display }} · RIR {{ item.rir }}</p>
+  </article>
+{% empty %}
+  <p>Brak ćwiczeń w tym treningu.</p>
+{% endfor %}
+
+<a href="{% url 'workout_list' %}">← Wróć</a>
+{% endblock %}

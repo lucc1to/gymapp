@@ -5,7 +5,7 @@
 
 {% for workout in workouts %}
   <article>
-    <h3>{{ workout.name }}</h3>
+    <h3><a href="{% url 'workout_detail' workout.pk %}">{{ workout.name }}</a></h3>
     <p>{{ workout.items.count }} ćwiczeń · {{ workout.total_volume }} kg</p>
   </article>
 {% empty %}
