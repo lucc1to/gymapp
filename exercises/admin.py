@@ -4,7 +4,7 @@ from .models import Exercise
 
 
 # Register your models here.
-@admin.register(Exercise)
+@admin.register(Exercise)  # git
 class ExerciseAdmin(admin.ModelAdmin):
     list_display = ["name", "muscle"]
     list_filter = ["muscle"]
