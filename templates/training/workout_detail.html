@@ -7,6 +7,10 @@
   <article>
     <strong>{{ item.exercise }}</strong>
     <p>{{ item.sets }} x {{ item.reps }} · {{ item.weight_kg }} kg · przerwa {{ item.rest_display }} · RIR {{ item.rir }}</p>
+    <form method="post" action="{% url 'item_delete' item.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="secondary outline">Usuń</button>
+    </form>
   </article>
 {% empty %}
   <p>Brak ćwiczeń w tym treningu.</p>
