@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Moje treningi</h1>
+
+{% for workout in workouts %}
+  <article>
+    <h3>{{ workout.name }}</h3>
+    <p>{{ workout.items.count }} ćwiczeń · {{ workout.total_volume }} kg</p>
+  </article>
+{% empty %}
+  <p>Nie masz jeszcze treningów.</p>
+{% endfor %}
+{% endblock %}

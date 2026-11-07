@@ -17,7 +17,7 @@ class Workout(TimeStampedModel):
         return self.name
 
     def total_volume(self):
-        return sum(item.volume() for item in self.item.all())
+        return sum(item.volume() for item in self.items.all())
 
 
 class WorkoutExercise(TimeStampedModel):
@@ -50,6 +50,3 @@ class WorkoutExercise(TimeStampedModel):
         minutes = self.rest_seconds // 60
         seconds = self.rest_seconds % 60
         return f"{minutes}:{seconds:02d}"
-
-
-# Create your models here.
