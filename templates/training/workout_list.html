@@ -3,6 +3,8 @@
 {% block content %}
 <h1>Moje treningi</h1>
 
+<a href="{% url 'workout_create' %}" role="button">+ Nowy trening</a>
+
 {% for workout in workouts %}
   <article>
     <h3><a href="{% url 'workout_detail' workout.pk %}">{{ workout.name }}</a></h3>
