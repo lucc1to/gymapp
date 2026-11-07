@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Workout, WorkoutExercise
+from .models import Workout, WorkoutExercise, WorkoutSession, SessionSet
 
 
 class WorkoutExerciseInline(admin.TabularInline):
@@ -19,4 +19,12 @@ class WorkoutExerciseAdmin(admin.ModelAdmin):
     list_display = ["workout", "exercise", "sets", "reps", "weight_kg"]
 
 
-# Register your models here.
+class SessionSetInLine(admin.TabularInline):
+    model = SessionSet
+    extra = 0
+
+
+@admin.register(WorkoutSession)
+class WorkoutSessionAdmin(admin.ModelAdmin):
+    list_display = ["name", "user", "started_at", "created_at"]
+    inlines = [SessionSetInLine]
