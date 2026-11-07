@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from .forms import WorkoutForm, WorkoutExerciseForm
-from .models import Workout, WorkoutExercise
+from .models import Workout, WorkoutExercise, WorkoutSession
 
 
 @login_required
@@ -50,3 +50,22 @@ def item_delete(request, pk):
     workout_pk = item.workout.pk
     item.delete()
     return redirect("workout_detail", pk=workout_pk)
+
+
+@login_required
+@require_POST
+def session_start(request, pk):
+    workout = get_object_or_404(Workout, pk=pk, user=request.user)
+    active = WorkoutSession.objects.filter(
+        user=request.user, finished_at__isnull=True
+    ).first()
+    if active:
+        return redirect("session_detail", pk=active.pk)
+    session = workout.start_session()
+    return redirect("session_detail", pk=session.pk)
+
+
+@login_required
+def session_detail(request, pk):
+    session = get_object_or_404(WorkoutSession, pk=pk, user=request.user)
+    return render(request, "training/session_detail.html", {"session": session})

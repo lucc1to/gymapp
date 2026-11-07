@@ -9,6 +9,10 @@
   <article>
     <h3><a href="{% url 'workout_detail' workout.pk %}">{{ workout.name }}</a></h3>
     <p>{{ workout.items.count }} ćwiczeń · {{ workout.total_volume }} kg</p>
+    <form method="post" action="{% url 'session_start' workout.pk %}">
+        {% csrf_token %}
+        <button type="submit">▶ START</button>
+    </form>
   </article>
 {% empty %}
   <p>Nie masz jeszcze treningów.</p>

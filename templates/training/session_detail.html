@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ session.name }}</h1>
+<p>Start: {{ session.started_at|time:"H:i" }}</p>
+
+{% regroup session.sets.all by exercise as groups %}
+
+{% for group in groups %}
+  <article>
+    <h3>{{ group.grouper }}</h3>
+    {% for s in group.list %}
+      <p>Seria {{ s.set_number }}: {{ s.weight_kg }} kg × {{ s.reps }}
+        {% if s.done %}✅{% else %}⬜{% endif %}</p>
+    {% endfor %}
+  </article>
+{% endfor %}
+
+<a href="{% url 'workout_list' %}">← Wróć</a>
+{% endblock %}
