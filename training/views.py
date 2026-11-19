@@ -53,6 +53,12 @@ def item_delete(request, pk):
 
 
 @login_required
+def session_detail(request, pk):
+    session = get_object_or_404(WorkoutSession, pk=pk, user=request.user)
+    return render(request, "training/session_detail.html", {"session": session})
+
+
+@login_required
 @require_POST
 def session_start(request, pk):
     workout = get_object_or_404(Workout, pk=pk, user=request.user)
@@ -63,9 +69,3 @@ def session_start(request, pk):
         return redirect("session_detail", pk=active.pk)
     session = workout.start_session()
     return redirect("session_detail", pk=session.pk)
-
-
-@login_required
-def session_detail(request, pk):
-    session = get_object_or_404(WorkoutSession, pk=pk, user=request.user)
-    return render(request, "training/session_detail.html", {"session": session})

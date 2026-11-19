@@ -1,0 +1,27 @@
+VSC
+python3 -m venv .venv  #tworzy srodowisko, biblioteki beda tu przechodzic
+source .venv/bin/activate #kazde pip instlal idzie do activate
+ctrl+shift+P -> select interpreter -> .venv #zeby wiedziec z jakich powidziei
+pip freeze > requirements.txt #aktalne biblioteki tam
+
+GIT
+git init #TWORZY puste repozytorium w visualu
+git add . #idzie do staging area
+git comimit -m "Initial setup" #tworzy comita
+stworzenie repo na githubie #tworzysz repo w przegladarce 
+git remote add origin "link" # nadaje nawzianie z visalua do jakiego repo
+git push -u origin main #Pushuje i kod z galezi main na githuba.
+
+
+DJANGO
+django-admin startproject config .  - Tworzy pliki w visualu, manage.py pilot, urls - linki w stornie
+python manage.py runserver - wlacza server www,   dziala gdy localhost:8000,  localhost:8000/admin - strona admina
+python manage.py migrate -- tworzymy baze danych
+python manage.py createsuperuser -- tworzy admina (lukasz Komputer123!)
+
+Moduły
+python manage.py startapp core - tworzy folder core z głównymi rzeczami DJANGO globalnymi, wspoldzielone dla wszystkich
+python manage.py startapp accounts - tworzy folder/aplikacje za uzytkownikow, uwierzytelnianie, logowanie, rejestracje, profile
+python manage.py startapp exercvies - tworzy baze danych na cwiczenia
+
+
