@@ -1,17 +1,31 @@
 {% extends "base.html" %}
+{% load l10n %}
 
 {% block content %}
+<style>
+  .set-row { display: flex; gap: .5rem; align-items: center; margin-bottom: .5rem; }
+  .set-row input, .set-row button { margin: 0; }
+  .set-row input { width: 5rem; }
+  .set-row button { width: auto; }
+</style>
+
 <h1>{{ session.name }}</h1>
-<p>Start: {{ session.started_at|time:"H:i" }}</p>
 
 {% regroup session.sets.all by exercise as groups %}
-
 {% for group in groups %}
   <article>
     <h3>{{ group.grouper }}</h3>
     {% for s in group.list %}
-      <p>Seria {{ s.set_number }}: {{ s.weight_kg }} kg × {{ s.reps }}
-        {% if s.done %}✅{% else %}⬜{% endif %}</p>
+      <form method="post" action="{% url 'set_update' s.pk %}" id="set-{{ s.pk }}" class="set-row">
+        {% csrf_token %}
+        <span>{{ s.set_number }}.</span>
+        <input type="number" name="weight_kg" value="{{ s.weight_kg|unlocalize }}" step="0.5" inputmode="decimal">
+        <span>kg</span>
+        <input type="number" name="reps" value="{{ s.reps }}" inputmode="numeric">
+        <button type="submit" {% if not s.done %}class="outline"{% endif %}>
+          {% if s.done %}✅{% else %}✓{% endif %}
+        </button>
+      </form>
     {% endfor %}
   </article>
 {% endfor %}

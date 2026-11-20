@@ -1,5 +1,5 @@
 from django import forms
-from .models import Workout, WorkoutExercise
+from .models import Workout, WorkoutExercise, SessionSet
 
 
 class WorkoutForm(forms.ModelForm):
@@ -20,3 +20,9 @@ class WorkoutExerciseForm(forms.ModelForm):
             "rir",
             "notes",
         ]
+
+
+class SessionSetForm(forms.ModelForm):
+    class Meta:
+        model = SessionSet
+        fields = ["weight_kg", "reps"]

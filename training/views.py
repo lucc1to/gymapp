@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
-from .forms import WorkoutForm, WorkoutExerciseForm
-from .models import Workout, WorkoutExercise, WorkoutSession
+from django.urls import reverse
+from .forms import WorkoutForm, WorkoutExerciseForm, SessionSetForm
+from .models import Workout, WorkoutExercise, WorkoutSession, SessionSet
 
 
 @login_required
@@ -69,3 +70,17 @@ def session_start(request, pk):
         return redirect("session_detail", pk=active.pk)
     session = workout.start_session()
     return redirect("session_detail", pk=session.pk)
+
+
+@login_required
+@require_POST
+def set_update(request, pk):
+    s = get_object_or_404(SessionSet, pk=pk, session__user=request.user)
+    if s.session.is_active():
+        form = SessionSetForm(request.POST, instance=s)
+        if form.is_valid():
+            s = form.save(commit=False)
+            s.done = True
+            s.save()
+    url = reverse("session_detail", args=[s.session.pk])
+    return redirect(f"{url}#set-{s.pk}")
