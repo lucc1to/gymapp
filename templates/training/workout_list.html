@@ -2,6 +2,12 @@
 
 {% block content %}
 <h1>Moje treningi</h1>
+{% if active %}
+  <article>
+    Trwa trening: <strong>{{ active.name }}</strong>
+    <a href="{% url 'session_detail' active.pk %}" role="button">Wróć do treningu</a>
+  </article>
+{% endif %}
 
 <a href="{% url 'workout_create' %}" role="button">+ Nowy trening</a>
 

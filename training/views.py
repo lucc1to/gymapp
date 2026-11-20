@@ -9,7 +9,12 @@ from .models import Workout, WorkoutExercise, WorkoutSession, SessionSet
 @login_required
 def workout_list(request):
     workouts = Workout.objects.filter(user=request.user)
-    return render(request, "training/workout_list.html", {"workouts": workouts})
+    active = WorkoutSession.objects.filter(
+        user=request.user, finished_at__isnull=True
+    ).first()
+    return render(
+        request, "training/workout_list.html", {"workouts": workouts, "active": active}
+    )
 
 
 @login_required
