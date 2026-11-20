@@ -131,4 +131,6 @@ MAILERS = {
     },
 }
 
-LOGIN_URL = "admin/login"
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "workout_list"
+LOGOUT_REDIRECT_URL = "login"

@@ -10,7 +10,19 @@
   <main class="container">
     <nav>
       <ul><li><strong>GymApp</strong></li></ul>
-      <ul><li><a href="{% url 'workout_list' %}">Treningi</a></li></ul>
+      <ul>
+  {% if user.is_authenticated %}
+    <li><a href="{% url 'workout_list' %}">Treningi</a></li>
+    <li>
+      <form method="post" action="{% url 'logout' %}" style="margin:0">
+        {% csrf_token %}
+        <button type="submit" class="outline secondary">Wyloguj</button>
+      </form>
+    </li>
+  {% else %}
+    <li><a href="{% url 'login' %}">Zaloguj</a></li>
+  {% endif %}
+</ul>
     </nav>
     {% block content %}{% endblock %}
   </main>
