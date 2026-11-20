@@ -11,6 +11,25 @@
 
 <h1>{{ session.name }}</h1>
 
+{% if session.is_active %}
+  <p>⏱ <strong id="timer" data-start="{{ session.started_at|date:'U' }}">00:00:00</strong></p>
+  <script>
+    const el = document.getElementById("timer");
+    const start = Number(el.dataset.start) * 1000;
+
+    function tick() {
+      const s = Math.floor((Date.now() - start) / 1000);
+      const h = String(Math.floor(s / 3600)).padStart(2, "0");
+      const m = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+      const sec = String(s % 60).padStart(2, "0");
+      el.textContent = `${h}:${m}:${sec}`;
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+{% endif %}
+
 {% regroup session.sets.all by exercise as groups %}
 {% for group in groups %}
   <article>
