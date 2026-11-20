@@ -9,4 +9,5 @@ urlpatterns = [
     path("workouts/<int:pk>/start/", views.session_start, name="session_start"),
     path("sessions/<int:pk>/", views.session_detail, name="session_detail"),
     path("sets/<int:pk>/update/", views.set_update, name="set_update"),
+    path("sessions/<int:pk>/finish/", views.session_finish, name="session_finish"),
 ]

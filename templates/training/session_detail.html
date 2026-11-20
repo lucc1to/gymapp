@@ -49,5 +49,18 @@
   </article>
 {% endfor %}
 
+
+{% if session.is_active %}
+  <form method="post" action="{% url 'session_finish' session.pk %}">
+    {% csrf_token %}
+    <button type="submit" onclick="return confirm('Zakończyć trening?')">ZAKOŃCZ TRENING</button>
+  </form>
+{% else %}
+  <article>
+    <h3>Trening zakończony.</h3>
+    <p>Czas: {{ session.duration_display }} · Volume: {{ session.total_volume }} kg</p>
+  </article>
+{% endif %}
+
 <a href="{% url 'workout_list' %}">← Wróć</a>
 {% endblock %}

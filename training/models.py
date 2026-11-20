@@ -99,6 +99,24 @@ class WorkoutSession(TimeStampedModel):
     def total_volume(self):
         return sum(s.volume() for s in self.sets.filter(done=True))
 
+    def finish(self):
+        self.finished_at = timezone.now()
+        self.save()
+
+    def duration(self):
+        end = self.finished_at or timezone.now()
+        return end - self.started_at
+
+    def duration_display(self):
+        duration = self.duration()
+        total_seconds = int(duration.total_seconds())
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        if hours > 0:
+            return f"{hours}:{minutes:02d}:{seconds:02d}"
+        else:
+            return f"{minutes}:{seconds:02d}"
+
 
 class SessionSet(TimeStampedModel):
     session = models.ForeignKey(
@@ -121,4 +139,4 @@ class SessionSet(TimeStampedModel):
         return f"{self.exercise} seria {self.set_number}"
 
     def volume(self):
-        return self.kg * self.reps
+        return self.weight_kg * self.reps

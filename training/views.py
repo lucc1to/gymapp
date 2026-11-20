@@ -84,3 +84,12 @@ def set_update(request, pk):
             s.save()
     url = reverse("session_detail", args=[s.session.pk])
     return redirect(f"{url}#set-{s.pk}")
+
+
+@login_required
+@require_POST
+def session_finish(request, pk):
+    session = get_object_or_404(WorkoutSession, pk=pk, user=request.user)
+    if session.is_active():
+        session.finish()
+    return redirect("session_detail", pk=session.pk)
