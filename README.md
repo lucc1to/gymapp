@@ -1,2 +1,1 @@
-🚧 in progress
-GYM app to coordinate your workouts.
+GYM APP is in progress
