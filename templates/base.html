@@ -13,11 +13,13 @@
       <ul>
   {% if user.is_authenticated %}
     <li><a href="{% url 'workout_list' %}">Treningi</a></li>
+    <li><a href="{% url 'profile' %}">Profil</a></li>
     <li>
       <form method="post" action="{% url 'logout' %}" style="margin:0">
         {% csrf_token %}
         <button type="submit" class="outline secondary">Wyloguj</button>
       </form>
+    </li>
     </li>
   {% else %}
     <li><a href="{% url 'login' %}">Zaloguj</a></li>

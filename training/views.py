@@ -4,6 +4,7 @@ from django.views.decorators.http import require_POST
 from django.urls import reverse
 from .forms import WorkoutForm, WorkoutExerciseForm, SessionSetForm
 from .models import Workout, WorkoutExercise, WorkoutSession, SessionSet
+from accounts.models import Profile
 
 
 @login_required
@@ -29,7 +30,11 @@ def workout_detail(request, pk):
             item.save()
             return redirect("workout_detail", pk=workout.pk)
     else:
-        form = WorkoutExerciseForm()
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        form = WorkoutExerciseForm(
+            initial={"rest_seconds": profile.default_rest_seconds}
+        )
+
     return render(
         request, "training/workout_detail.html", {"workout": workout, "form": form}
     )
