@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Historia</h1>
+
+{% for session in sessions %}
+  <article>
+    <h3><a href="{% url 'session_detail' session.pk %}">{{ session.name }}</a></h3>
+    <p>{{ session.started_at|date:"d.m.Y H:i" }} · ⏱ {{ session.duration_display }} · {{ session.total_volume }} kg</p>
+  </article>
+{% empty %}
+  <p>Nie masz jeszcze zakończonych treningów.</p>
+{% endfor %}
+{% endblock %}

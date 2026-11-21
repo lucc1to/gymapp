@@ -13,6 +13,7 @@
       <ul>
   {% if user.is_authenticated %}
     <li><a href="{% url 'workout_list' %}">Treningi</a></li>
+    <li><a href="{% url 'session_list' %}">Historia</a></li>
     <li><a href="{% url 'profile' %}">Profil</a></li>
     <li>
       <form method="post" action="{% url 'logout' %}" style="margin:0">

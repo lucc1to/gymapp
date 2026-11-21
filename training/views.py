@@ -103,3 +103,20 @@ def session_finish(request, pk):
     if session.is_active():
         session.finish()
     return redirect("session_detail", pk=session.pk)
+
+
+@login_required
+def session_list(request):
+    sessions = WorkoutSession.objects.filter(
+        user=request.user,
+        finished_at__isnull=False,
+    ).order_by("-started_at")
+    return render(request, "training/session_list.html", {"sessions": sessions})
+
+
+@login_required
+@require_POST
+def session_delete(request, pk):
+    session = get_object_or_404(WorkoutSession, pk=pk, user=request.user)
+    session.delete()
+    return redirect("session_list")

@@ -60,6 +60,11 @@
     <h3>Trening zakończony.</h3>
     <p>Czas: {{ session.duration_display }} · Volume: {{ session.total_volume }} kg</p>
   </article>
+  
+    <form method="post" action="{% url 'session_delete' session.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="secondary outline" onclick="return confirm('Na pewno usunąć ten trening?')">Usuń trening</button>
+  </form>
 {% endif %}
 
 <a href="{% url 'workout_list' %}">← Wróć</a>
