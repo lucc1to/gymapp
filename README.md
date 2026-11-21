@@ -22,3 +22,8 @@ python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 ```
+
+## Screenshots
+| Workouts | Session | History |
+|---|---|---|
+| ![](docs/list.png) | ![](docs/session.png) | ![](docs/history.png) |
