@@ -120,3 +120,11 @@ def session_delete(request, pk):
     session = get_object_or_404(WorkoutSession, pk=pk, user=request.user)
     session.delete()
     return redirect("session_list")
+
+
+@login_required
+@require_POST
+def workout_delete(request, pk):
+    workout = get_object_or_404(Workout, pk=pk, user=request.user)
+    workout.delete()
+    return redirect("workout_list")
