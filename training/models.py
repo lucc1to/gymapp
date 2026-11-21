@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from core.models import TimeStampedModel
 from exercises.models import Exercise
+from datetime import timedelta
 
 
 class Workout(TimeStampedModel):
@@ -13,7 +14,7 @@ class Workout(TimeStampedModel):
         related_name="workouts",
     )
     name = models.CharField(max_length=100)
-    notes = models.CharField(blank=True)
+    notes = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -45,6 +46,7 @@ class Workout(TimeStampedModel):
                     weight_kg=item.weight_kg,
                     reps=item.reps,
                     rir=item.rir,
+                    rest_seconds=item.rest_seconds,
                 )
         return session
 
@@ -57,7 +59,7 @@ class WorkoutExercise(TimeStampedModel):
     )
     exercise = models.ForeignKey(
         Exercise, on_delete=models.PROTECT
-    )  # jeden uzytkownik ma wiele treningow dlactego foreignkey
+    )  # jedno cwiczenie moze byc w wielu planach
     order = models.PositiveSmallIntegerField(default=0)
     sets = models.PositiveSmallIntegerField(default=3)
     reps = models.PositiveSmallIntegerField()
@@ -135,6 +137,12 @@ class WorkoutSession(TimeStampedModel):
         else:
             return f"{minutes}:{seconds:02d}"
 
+    def rest_ends_at(self):
+        last = self.sets.filter(done_at__isnull=False).order_by("-done_at").first()
+        if last is None:
+            return None
+        return last.done_at + timedelta(seconds=last.rest_seconds)
+
 
 class SessionSet(TimeStampedModel):
     session = models.ForeignKey(
@@ -149,6 +157,8 @@ class SessionSet(TimeStampedModel):
     reps = models.PositiveSmallIntegerField()
     rir = models.PositiveSmallIntegerField(null=True, blank=True)
     done = models.BooleanField(default=False)
+    rest_seconds = models.PositiveSmallIntegerField(default=90)
+    done_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["order", "set_number"]

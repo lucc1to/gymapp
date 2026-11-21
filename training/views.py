@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.urls import reverse
+from django.utils import timezone
 from .forms import WorkoutForm, WorkoutExerciseForm, SessionSetForm
 from .models import Workout, WorkoutExercise, WorkoutSession, SessionSet
 from accounts.models import Profile
@@ -108,6 +109,7 @@ def set_update(request, pk):
         if form.is_valid():
             s = form.save(commit=False)
             s.done = True
+            s.done_at = timezone.now()
             s.save()
     url = reverse("session_detail", args=[s.session.pk])
     return redirect(f"{url}#set-{s.pk}")
