@@ -140,3 +140,17 @@ class SessionSet(TimeStampedModel):
 
     def volume(self):
         return self.weight_kg * self.reps
+
+    def previous(self):
+        return (
+            SessionSet.objects.filter(
+                session__user=self.session.user,
+                session__finished_at__isnull=False,
+                session__started_at__lt=self.session.started_at,
+                exercise=self.exercise,
+                set_number=self.set_number,
+                done=True,
+            )
+            .order_by("-session__started_at")
+            .first()
+        )

@@ -3,7 +3,7 @@
 
 {% block content %}
 <style>
-  .set-row { display: flex; gap: .5rem; align-items: center; margin-bottom: .5rem; }
+  .set-row { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-bottom: .5rem; }
   .set-row input, .set-row button { margin: 0; }
   .set-row input { width: 5rem; }
   .set-row button { width: auto; }
@@ -44,6 +44,11 @@
         <button type="submit" {% if not s.done %}class="outline"{% endif %}>
           {% if s.done %}✅{% else %}✓{% endif %}
         </button>
+        {% with prev=s.previous %}
+          {% if prev %}
+            <small>ostatnio {{ prev.weight_kg }}×{{ prev.reps }}</small>
+          {% endif %}
+        {% endwith %}
       </form>
     {% endfor %}
   </article>
@@ -60,7 +65,7 @@
     <h3>Trening zakończony.</h3>
     <p>Czas: {{ session.duration_display }} · Volume: {{ session.total_volume }} kg</p>
   </article>
-  
+
     <form method="post" action="{% url 'session_delete' session.pk %}">
     {% csrf_token %}
     <button type="submit" class="secondary outline" onclick="return confirm('Na pewno usunąć ten trening?')">Usuń trening</button>
