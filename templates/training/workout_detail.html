@@ -9,11 +9,25 @@
   <article>
     <strong>{{ item.exercise }}</strong>
     <p>{{ item.sets }} x {{ item.reps }} · {{ item.weight_kg }} kg · przerwa {{ item.rest_display }} · RIR {{ item.rir }}</p>
-    <form method="post" action="{% url 'item_delete' item.pk %}">
-      {% csrf_token %}
-      <button type="submit" class="secondary outline">Usuń</button>
-      <a href="{% url 'item_edit' item.pk %}">Edytuj</a>
-    </form>
+
+    <div style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap">
+      <form method="post" action="{% url 'item_move' item.pk 'up' %}" style="margin:0">
+        {% csrf_token %}
+        <button type="submit" class="outline" {% if forloop.first %}disabled{% endif %}>↑</button>
+      </form>
+
+      <form method="post" action="{% url 'item_move' item.pk 'down' %}" style="margin:0">
+        {% csrf_token %}
+        <button type="submit" class="outline" {% if forloop.last %}disabled{% endif %}>↓</button>
+      </form>
+
+      <a href="{% url 'item_edit' item.pk %}">✏️ Edytuj</a>
+
+      <form method="post" action="{% url 'item_delete' item.pk %}" style="margin:0">
+        {% csrf_token %}
+        <button type="submit" class="secondary outline">Usuń</button>
+      </form>
+    </div>
   </article>
 {% empty %}
   <p>Brak ćwiczeń w tym treningu.</p>

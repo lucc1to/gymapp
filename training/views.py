@@ -158,3 +158,13 @@ def item_edit(request, pk):
     else:
         form = WorkoutExerciseForm(instance=item)
     return render(request, "training/item_form.html", {"form": form, "item": item})
+
+
+@login_required
+@require_POST
+def item_move(request, pk, direction):
+    item = get_object_or_404(WorkoutExercise, pk=pk, workout__user=request.user)
+    step = {"up": -1, "down": 1}.get(direction)
+    if step is not None:
+        item.move(step)
+    return redirect("workout_detail", pk=item.workout.pk)

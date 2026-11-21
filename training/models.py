@@ -80,6 +80,16 @@ class WorkoutExercise(TimeStampedModel):
         seconds = self.rest_seconds % 60
         return f"{minutes}:{seconds:02d}"
 
+    def move(self, direction):
+        items = list(self.workout.items.all())
+        i = items.index(self)
+        j = i + direction
+        if 0 <= j < len(items):
+            items[i], items[j] = items[j], items[i]
+            for position, item in enumerate(items, start=1):
+                item.order = position
+                item.save(update_fields=["order"])
+
 
 class WorkoutSession(TimeStampedModel):
     user = models.ForeignKey(
