@@ -145,3 +145,16 @@ def workout_delete(request, pk):
     workout = get_object_or_404(Workout, pk=pk, user=request.user)
     workout.delete()
     return redirect("workout_list")
+
+
+@login_required
+def item_edit(request, pk):
+    item = get_object_or_404(WorkoutExercise, pk=pk, workout__user=request.user)
+    if request.method == "POST":
+        form = WorkoutExerciseForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect("workout_detail", pk=item.workout.pk)
+    else:
+        form = WorkoutExerciseForm(instance=item)
+    return render(request, "training/item_form.html", {"form": form, "item": item})
