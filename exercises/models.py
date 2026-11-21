@@ -17,5 +17,8 @@ class Exercise(TimeStampedModel):
     muscle = models.CharField(max_length=20, choices=Muscle.choices)
     description = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ["muscle", "name"]
+
     def __str__(self):
         return self.name
