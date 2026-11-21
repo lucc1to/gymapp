@@ -3,6 +3,7 @@
 
 {% block content %}
 <h1>{{ workout.name }}</h1>
+<a href="{% url 'workout_edit' workout.pk %}">Edytuj</a>
 
 {% for item in workout.items.all %}
   <article>

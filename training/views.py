@@ -51,7 +51,24 @@ def workout_create(request):
             return redirect("workout_detail", pk=workout.pk)
     else:
         form = WorkoutForm()
-    return render(request, "training/workout_form.html", {"form": form})
+    return render(
+        request, "training/workout_form.html", {"form": form, "title": "Nowy trening"}
+    )
+
+
+@login_required
+def workout_edit(request, pk):
+    workout = get_object_or_404(Workout, pk=pk, user=request.user)
+    if request.method == "POST":
+        form = WorkoutForm(request.POST, instance=workout)
+        if form.is_valid():
+            form.save()
+            return redirect("workout_detail", pk=workout.pk)
+    else:
+        form = WorkoutForm(instance=workout)
+    return render(
+        request, "training/workout_form.html", {"form": form, "title": "Edytuj trening"}
+    )
 
 
 @login_required
