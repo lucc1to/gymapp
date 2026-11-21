@@ -21,6 +21,14 @@ class Workout(TimeStampedModel):
     def total_volume(self):
         return sum(item.volume() for item in self.items.all())
 
+    def exercises_label(self):
+        n = self.items.count()
+        if n == 1:
+            return "1 ćwiczenie"
+        if n % 10 in [2, 3, 4] and n % 100 not in [12, 13, 14]:
+            return f"{n} ćwiczenia"
+        return f"{n} ćwiczeń"
+
     def start_session(self):
         session = WorkoutSession.objects.create(
             user=self.user,
