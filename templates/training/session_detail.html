@@ -7,6 +7,16 @@
   .set-row input, .set-row button { margin: 0; }
   .set-row input { width: 5rem; }
   .set-row button { width: auto; }
+
+  .rest-bar {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    display: flex; gap: .5rem; align-items: center; justify-content: center;
+    padding: .75rem; background: var(--pico-background-color);
+    border-top: 1px solid var(--pico-muted-border-color);
+  }
+  .rest-bar[hidden] { display: none; }
+  .rest-bar button { margin: 0; width: auto; }
+  main { padding-bottom: 5rem; }
 </style>
 
 <h1>{{ session.name }}</h1>
@@ -29,6 +39,60 @@
     setInterval(tick, 1000);
   </script>
 {% endif %}
+
+{% if session.is_active %}
+  {% with end=session.rest_ends_at %}
+    {% if end %}
+      <div id="rest-bar" class="rest-bar" data-end="{{ end|date:'U' }}" hidden>
+        Przerwa: <strong id="rest-left">0:00</strong>
+        <button type="button" id="rest-plus" class="outline">+15s</button>
+        <button type="button" id="rest-skip" class="secondary outline">Pomiń</button>
+      </div>
+    {% endif %}
+  {% endwith %}
+{% endif %}
+
+<script>
+  const bar = document.getElementById("rest-bar");
+  if (bar) {
+    let end = Number(bar.dataset.end) * 1000;
+    const left = document.getElementById("rest-left");
+    let running = false;
+
+    function alarm() {
+      try {
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        osc.frequency.value = 880;
+        osc.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+      } catch (e) {}
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    }
+
+    function update() {
+      const s = Math.ceil((end - Date.now()) / 1000);
+      if (s > 0) {
+        running = true;
+        bar.hidden = false;
+        left.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+      } else {
+        bar.hidden = true;
+        if (running) {
+          running = false;
+          alarm();
+        }
+      }
+    }
+
+    document.getElementById("rest-plus").onclick = () => { end += 15000; update(); };
+    document.getElementById("rest-skip").onclick = () => { running = false; end = Date.now(); update(); };
+
+    update();
+    setInterval(update, 250);
+  }
+</script>
 
 {% regroup session.sets.all by exercise as groups %}
 {% for group in groups %}
