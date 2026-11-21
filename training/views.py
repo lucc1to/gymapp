@@ -170,3 +170,19 @@ def item_move(request, pk, direction):
     if step is not None:
         item.move(step)
     return redirect("workout_detail", pk=item.workout.pk)
+
+
+@login_required
+@require_POST
+def exercise_rest_update(request, pk, exercise_pk):
+    session = get_object_or_404(WorkoutSession, pk=pk, user=request.user)
+
+    try:
+        seconds = int(request.POST.get("rest_seconds", ""))
+    except ValueError:
+        seconds = None
+
+    if session.is_active() and seconds is not None and 0 <= seconds <= 600:
+        session.sets.filter(exercise_id=exercise_pk).update(rest_seconds=seconds)
+
+    return redirect("session_detail", pk=session.pk)

@@ -98,6 +98,17 @@
 {% for group in groups %}
   <article>
     <h3>{{ group.grouper }}</h3>
+
+    {% if session.is_active %}
+  <form method="post" action="{% url 'exercise_rest_update' session.pk group.grouper.pk %}" class="set-row">
+    {% csrf_token %}
+    <span>⏳ przerwa</span>
+    <input type="number" name="rest_seconds" value="{{ group.list.0.rest_seconds }}" min="0" max="600" step="15" inputmode="numeric">
+    <span>s</span>
+    <button type="submit" class="outline">OK</button>
+  </form>
+{% endif %}
+
     {% for s in group.list %}
       <form method="post" action="{% url 'set_update' s.pk %}" id="set-{{ s.pk }}" class="set-row">
         {% csrf_token %}
