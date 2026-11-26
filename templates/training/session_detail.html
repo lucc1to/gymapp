@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load l10n %}
 
+
 {% block content %}
 <style>
   .set-row { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-bottom: .5rem; }
@@ -102,7 +103,7 @@
     {% if session.is_active %}
   <form method="post" action="{% url 'exercise_rest_update' session.pk group.grouper.pk %}" class="set-row">
     {% csrf_token %}
-    <span>⏳ przerwa</span>
+    <span>przerwa</span>
     <input type="number" name="rest_seconds" value="{{ group.list.0.rest_seconds }}" min="0" max="600" step="15" inputmode="numeric">
     <span>s</span>
     <button type="submit" class="outline">OK</button>
